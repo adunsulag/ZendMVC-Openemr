@@ -10,9 +10,13 @@ use Zend\Db\TableGateway\TableGateway;
 use Interop\Container\ContainerInterface;
 return array(
     'controllers' => array(
-        'invokables' => array(
-            'ccpaymentmanager'    => 'CCPaymentManager\Controller\CCPaymentManagerController',
-        ),
+        'factories' => array(
+            'ccpaymentmanager' => function (ContainerInterface $container, $requestedName) {
+                // make it so we get the instantiated adapter here.
+                return new CCPaymentManagerController($container->get(CCPaymentManagerTable::class));
+            },
+
+        )
     ),
 
     'router' => array(
