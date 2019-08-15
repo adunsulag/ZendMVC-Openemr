@@ -31,6 +31,8 @@ class Module
         return include __DIR__ . '/config/module.config.php';
     }
 
+
+
     public function init(ModuleManager $moduleManager)
     {
         $sharedEvents = $moduleManager->getEventManager()->getSharedManager();
@@ -48,6 +50,21 @@ class Module
 
     public function getServiceConfig()
     {
+        return array(
+            'factories' => array(
+                'CCPaymentManager\Model\CCPaymentManagerTable' =>  function ($sm) {
+                    $tableGateway = $sm->get('CCPaymentManagerTableGateway');
+                    $table = new CCPaymentManagerTable($tableGateway);
+                    return $table;
+                },
+                'CCPaymentManagerTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new CCPaymentManager());
+                    return new TableGateway('billing', $dbAdapter, null, $resultSetPrototype);
+                },
+            ),
+        );
     }
 
 

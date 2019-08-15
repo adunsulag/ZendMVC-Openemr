@@ -55,7 +55,7 @@ return array(
                     $table = new CCPaymentManagerTable($tableGateway);
                     return $table;
                 }
-            ,ModuleconfigController::class => InvokableFactory::class
+
             ),
         ]
     ),
